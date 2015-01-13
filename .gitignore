@@ -1,1 +1,6 @@
+# eclipse specific git ignore
+.project
+.settings
+.classpath
+
 /build/
