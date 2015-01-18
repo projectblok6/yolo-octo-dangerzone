@@ -10,12 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
  
 @Path("WebListener")
-public class WebListener {
+public class WebListener  {
      @GET
      @Path("/generate")
-      @Produces(MediaType.TEXT_HTML)
-      public String generateBusinessRule() {
-    	 System.out.println("Generate Business Rule");
-    	 return "test";
+      public void generateBusinessRule() {
+    	 System.out.println("test");
       }
 }

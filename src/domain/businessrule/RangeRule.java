@@ -11,18 +11,15 @@ import domain.Component;
 import domain.Operator;
 
 public class RangeRule implements BusinessRule {
+	private int ruleId;
 	private String ruleName;
 	private ArrayList<String> triggerEvents;
 	private Operator operator;
 	private ArrayList<Component> components;
 	private String errorMessage;
 
-	public RangeRule(ArrayList<String> triggerEvents, String errorMessage, ArrayList<Component> components, Operator operator) {
-		this.triggerEvents = triggerEvents;
-		this.errorMessage = errorMessage;
-		this.components = components;
-		this.operator = operator;
-	}
+	public RangeRule(){
+	};
 
 	public String getGeneratedRule() {
 		String ruleString = getTemplate("src/ruletemplate.txt");	
@@ -79,10 +76,37 @@ public class RangeRule implements BusinessRule {
 	
 	private String getComparisonLine(){
 		String comparison = "";
-		comparison += components.get(0).getString() + " " + operator.toString()
-				+ " "  + components.get(1).getString() + " and " 
-				+ components.get(2).getString();
+		comparison += components.get(0).toString() + " " + operator.toString()
+				+ " "  + components.get(1).toString() + " and " 
+				+ components.get(2).toString();
 		return comparison;
 	}
 	
+	public void setRuleId(int ruleId){
+		this.ruleId = ruleId;
+	}
+
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
+	}
+
+	public void setTriggerEvents(ArrayList<String> triggerEvents) {
+		this.triggerEvents = triggerEvents;
+	}
+	
+	public void setOperator(Operator operator) {
+		this.operator = operator;
+	}
+	
+	public void setComponents(ArrayList<Component> components) {
+		this.components = components;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
+	public int getRuleId(){
+		return ruleId;
+	}
 }

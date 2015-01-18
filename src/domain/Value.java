@@ -8,7 +8,7 @@ public class Value implements Component {
 	}
 	
 	@Override
-	public String getString(){
+	public String toString(){
 		return val;
 	}
 }

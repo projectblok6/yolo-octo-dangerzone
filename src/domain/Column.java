@@ -8,7 +8,7 @@ public class Column implements Component {
 	}
 	
 	@Override
-	public String getString(){
+	public String toString(){
 		return col;
 	}
 }
