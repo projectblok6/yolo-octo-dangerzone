@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import domain.Component;
 import domain.Operator;
+import domain.TargetDatabase;
 
 public interface BusinessRule {
 	public String getGeneratedRule();
@@ -19,6 +20,12 @@ public interface BusinessRule {
 	public void setComponents(ArrayList<Component> components);
 	
 	public void setErrorMessage(String errorMessage);
+	
+	public void setRestrictedColumn(String restrictedColumn);
+	
+	public void setTargetDatabase(TargetDatabase targetDatabase);
+	
+	public TargetDatabase getTargetDatabase();
 	
 	public int getRuleId();
 }

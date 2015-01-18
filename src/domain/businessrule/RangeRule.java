@@ -4,30 +4,35 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import domain.Component;
 import domain.Operator;
+import domain.TargetDatabase;
 
 public class RangeRule implements BusinessRule {
 	private int ruleId;
 	private String ruleName;
-	private ArrayList<String> triggerEvents;
 	private Operator operator;
+	private String restrictedColumn;
+	private ArrayList<String> triggerEvents;
 	private ArrayList<Component> components;
 	private String errorMessage;
+	private TargetDatabase targetDatabase;
 
-	public RangeRule(){
+	public RangeRule() {
 	};
 
 	public String getGeneratedRule() {
-		String ruleString = getTemplate("src/ruletemplate.txt");	
+		String ruleString = getTemplate("src/ruletemplate.txt");
 		ruleString = ruleString.replaceAll("%errormessage%", errorMessage);
 		ruleString = ruleString.replaceAll("%triggerevents%", getTriggerLine());
-		ruleString = ruleString.replaceAll("%declarations%", getDeclarationsLine());
-		ruleString = ruleString.replaceAll("%selectstatements%", getSelectLine());
+		ruleString = ruleString.replaceAll("%declarations%",getDeclarationsLine());
+		ruleString = ruleString.replaceAll("%selectstatements%",getSelectLine());
 		ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
+		System.out.println(ruleString);
 		return ruleString;
 	}
 
@@ -49,40 +54,52 @@ public class RangeRule implements BusinessRule {
 		}
 		return ruleString;
 	}
-	
-	private String getTriggerLine(){
-		String triggerLine = "";
-		for (String triggerEvent : triggerEvents) {
-			triggerLine += triggerEvent + ", ";
+
+	private String getTriggerLine() {
+		// if no trigger events
+		if (triggerEvents.size() == 0) {
+			return null;
+			// TODO create exception: no trigger events
+		} else {
+			String triggerLine = "";
+			for (String triggerEvent : triggerEvents) {
+				triggerLine += triggerEvent + ", ";
+			}
+			return triggerLine.substring(0, triggerLine.length() - 2);
 		}
-		return triggerLine.substring(0, triggerLine.length() - 2);
 	}
-	
-	private String getDeclarationsLine(){
+
+	private String getDeclarationsLine() {
 		String declarationLine = "";
-		for(Component component : components){
-			//declarationLine += component.getDeclarationLine();
+		for (Component component : components) {
+			// declarationLine += component.getDeclarationLine();
 		}
 		return declarationLine;
 	}
-	
-	private String getSelectLine(){
+
+	private String getSelectLine() {
 		String declarationLine = "";
-		for(Component component : components){
-			//declarationLine += component.getSelectStatement();
+		for (Component component : components) {
+			// declarationLine += component.getSelectStatement();
 		}
 		return declarationLine;
 	}
-	
-	private String getComparisonLine(){
-		String comparison = "";
-		comparison += components.get(0).toString() + " " + operator.toString()
-				+ " "  + components.get(1).toString() + " and " 
-				+ components.get(2).toString();
-		return comparison;
+
+	private String getComparisonLine() {
+		if (components.size() < 2) {
+			return null;
+			// TODO create exception: not enough components
+		} else {
+			String comparison = "";
+			comparison += restrictedColumn + " "
+					+ operator.toString() + " " + components.get(0).toString()
+					+ " and " + components.get(1).toString();
+			System.out.println(comparison);
+			return comparison;
+		}
 	}
-	
-	public void setRuleId(int ruleId){
+
+	public void setRuleId(int ruleId) {
 		this.ruleId = ruleId;
 	}
 
@@ -93,11 +110,11 @@ public class RangeRule implements BusinessRule {
 	public void setTriggerEvents(ArrayList<String> triggerEvents) {
 		this.triggerEvents = triggerEvents;
 	}
-	
+
 	public void setOperator(Operator operator) {
 		this.operator = operator;
 	}
-	
+
 	public void setComponents(ArrayList<Component> components) {
 		this.components = components;
 	}
@@ -106,7 +123,16 @@ public class RangeRule implements BusinessRule {
 		this.errorMessage = errorMessage;
 	}
 	
-	public int getRuleId(){
+	public void setRestrictedColumn(String restrictedColumn){
+		this.restrictedColumn = restrictedColumn;
+	}
+	public void setTargetDatabase(TargetDatabase targetDatabase){
+		this.targetDatabase = targetDatabase;
+	}
+	public int getRuleId() {
 		return ruleId;
+	}
+	public TargetDatabase getTargetDatabase(){
+		return this.targetDatabase;
 	}
 }

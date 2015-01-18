@@ -34,7 +34,6 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 		while (resultSet.next()) {
 			int BusinessRuleId = resultSet.getInt("BR_ID");
 			String BusinessRuleTypeName = resultSet.getString("Name");
-			System.out.println(BusinessRuleTypeName);
 			BusinessRule EmptyBusinessRule = getBusinessRuleObject(BusinessRuleTypeName);
 			EmptyBusinessRule.setRuleId(BusinessRuleId);
 			EmptyBusinessRules.add(EmptyBusinessRule);
@@ -54,7 +53,7 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 			ArrayList<BusinessRule> emptyBusinessRules) throws SQLException {
 		// creating prepared statements
 		PreparedStatement ruleStatement = connection
-				.prepareStatement("SELECT BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,Businessrule.Name_Code"
+				.prepareStatement("SELECT BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,Businessrule.Name_Code,Businessrule.Table_Ta,Businessrule.Column_Ta"
 						+ " FROM BUSINESSRULE"
 						+ " INNER JOIN OPERATOR_TYPE"
 						+ " ON BUSINESSRULE.OPERATOR_TYPE_OT_ID=OPERATOR_TYPE.OT_ID"
@@ -67,6 +66,10 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 				.prepareStatement("SELECT VALUE"
 						+ " FROM LITERAL_VALUE"
 						+ " WHERE BUSINESSRULE_BR_ID = ?");
+		PreparedStatement triggerStatement = connection
+				.prepareStatement("SELECT trigger_type"
+						+ " FROM trigger_event"
+						+ " WHERE BUSINESSRULE_BR_ID = ?");
 
 		// for each empty businessRule
 		for (BusinessRule br : emptyBusinessRules) {
@@ -76,15 +79,18 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 			ruleStatement.setInt(1, businessRuleId);
 			columnStatement.setInt(1, businessRuleId);
 			valueStatement.setInt(1, businessRuleId);
+			triggerStatement.setInt(1, businessRuleId);
 
 			// executing queries
 			ResultSet ruleResultSet = ruleStatement.executeQuery();
 			ResultSet columnResultSet = columnStatement.executeQuery();
 			ResultSet valueResultSet = valueStatement.executeQuery();
+			ResultSet triggerResultSet = triggerStatement.executeQuery();
 
 			// creating Components:
 			ArrayList<Component> deComponents = new ArrayList<Component>();
 			while (columnResultSet.next()) {
+				System.out.println("test");
 				Column c = new Column(columnResultSet.getString("TABLE_NAME")
 						+ "." + columnResultSet.getString("NAME"));
 				deComponents.add(c);
@@ -94,14 +100,21 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 				deComponents.add(v);
 			}
 			br.setComponents(deComponents);
-
+			
+			//creating trigger events
+			ArrayList<String> deTriggerEvents = new ArrayList<String>();
+			while (triggerResultSet.next()) {
+				deTriggerEvents.add(triggerResultSet.getString("trigger_type"));
+			}
+			br.setTriggerEvents(deTriggerEvents);
+			
 			// setting other data in businessRule
 			ruleResultSet.next();
 			br.setErrorMessage(ruleResultSet.getString("ERROR_MESSAGE"));
+			br.setRestrictedColumn(ruleResultSet.getString("Table_Ta")
+					+ "." + ruleResultSet.getString("Column_Ta"));
 			br.setOperator(new Operator(ruleResultSet.getString("NAME"),
 					ruleResultSet.getString("NAME")));
-			// br.setTriggerEvents(triggerEvents);
-			// br.setRuleName(ruleResultSet.getString("ruleResultSet"));
 		}
 		return emptyBusinessRules;
 	}
