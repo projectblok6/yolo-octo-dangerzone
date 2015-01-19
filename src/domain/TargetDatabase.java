@@ -4,10 +4,10 @@ public class TargetDatabase {
 	private String username;
 	private String password;
 	private String host;
-	private int port;
+	private String port;
 	private String SSID;
 	private String databaseType;
-	public TargetDatabase(String username, String password, String host, int port, String SSID, String databaseType) {
+	public TargetDatabase(String username, String password, String host, String port, String SSID, String databaseType) {
 		this.username = username;
 		this.password = password;
 		this.host = host;
@@ -24,11 +24,14 @@ public class TargetDatabase {
 	public String getHost() {
 		return host;
 	}
-	public int getPort() {
+	public String getPort() {
 		return port;
 	}
 	public String getSSID() {
 		return SSID;
+	}
+	public String getUrl(){
+		return 
 	}
 	public String getDatabaseType() {
 		return databaseType;

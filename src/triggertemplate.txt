@@ -1,5 +1,5 @@
 CREATE OR REPLACE TRIGGER %triggername%
-%triggerevent% on %tablename% FOR EACH ROW
+ on %tablename% FOR EACH ROW
 begin
   declare
     l_oper varchar2 ( 3 );

@@ -93,7 +93,6 @@ public class RangeRule implements BusinessRule {
 			comparison += restrictedColumn + " " + operator.toString() + " "
 					+ components.get(0).toString() + " and "
 					+ components.get(1).toString();
-			System.out.println(comparison);
 			return comparison;
 		}
 	}
