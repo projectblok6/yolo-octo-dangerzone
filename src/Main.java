@@ -12,7 +12,7 @@ public class Main {
 		ArrayList<BusinessRule> emptybusinessrules = dao.getEmptyUngeneratedBusinessRules();
 		ArrayList<BusinessRule> businessrules = dao.getFilledBusinessRules(emptybusinessrules);
 		for(BusinessRule b : businessrules){
-			b.getGeneratedRule();
+			System.out.println(b.getGeneratedRule());
 		}
 	}
 

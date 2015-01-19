@@ -29,10 +29,9 @@ public class RangeRule implements BusinessRule {
 		String ruleString = getTemplate("src/ruletemplate.txt");
 		ruleString = ruleString.replaceAll("%errormessage%", errorMessage);
 		ruleString = ruleString.replaceAll("%triggerevents%", getTriggerLine());
-		ruleString = ruleString.replaceAll("%declarations%",getDeclarationsLine());
-		ruleString = ruleString.replaceAll("%selectstatements%",getSelectLine());
+		ruleString = ruleString.replaceAll("%declarations%", getDeclarationsLine());
+		ruleString = ruleString.replaceAll("%selectstatements%", getSelectLine());
 		ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
-		System.out.println(ruleString);
 		return ruleString;
 	}
 
@@ -91,9 +90,9 @@ public class RangeRule implements BusinessRule {
 			// TODO create exception: not enough components
 		} else {
 			String comparison = "";
-			comparison += restrictedColumn + " "
-					+ operator.toString() + " " + components.get(0).toString()
-					+ " and " + components.get(1).toString();
+			comparison += restrictedColumn + " " + operator.toString() + " "
+					+ components.get(0).toString() + " and "
+					+ components.get(1).toString();
 			System.out.println(comparison);
 			return comparison;
 		}
@@ -122,17 +121,20 @@ public class RangeRule implements BusinessRule {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
-	
-	public void setRestrictedColumn(String restrictedColumn){
+
+	public void setRestrictedColumn(String restrictedColumn) {
 		this.restrictedColumn = restrictedColumn;
 	}
-	public void setTargetDatabase(TargetDatabase targetDatabase){
+
+	public void setTargetDatabase(TargetDatabase targetDatabase) {
 		this.targetDatabase = targetDatabase;
 	}
+
 	public int getRuleId() {
 		return ruleId;
 	}
-	public TargetDatabase getTargetDatabase(){
+
+	public TargetDatabase getTargetDatabase() {
 		return this.targetDatabase;
 	}
 }

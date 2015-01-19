@@ -27,22 +27,22 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 
 	public ArrayList<BusinessRule> getEmptyUngeneratedBusinessRules()
 			throws SQLException {
-		ArrayList<BusinessRule> EmptyBusinessRules = new ArrayList<BusinessRule>();
+		ArrayList<BusinessRule> emptyBusinessRules = new ArrayList<BusinessRule>();
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt
 				.executeQuery("SELECT Businessrule.BR_ID,Businessruletype.Name FROM Businessrule INNER JOIN Businessruletype ON Businessruletype.Brt_Id = Businessrule.Businessruletype_Brt_Id WHERE Businessrule.Status = 0 OR Businessrule.Status = 2");
 		while (resultSet.next()) {
-			int BusinessRuleId = resultSet.getInt("BR_ID");
-			String BusinessRuleTypeName = resultSet.getString("Name");
-			BusinessRule EmptyBusinessRule = getBusinessRuleObject(BusinessRuleTypeName);
-			EmptyBusinessRule.setRuleId(BusinessRuleId);
-			EmptyBusinessRules.add(EmptyBusinessRule);
+			int businessRuleId = resultSet.getInt("BR_ID");
+			String businessRuleTypeName = resultSet.getString("Name");
+			BusinessRule emptyBusinessRule = getBusinessRuleObject(businessRuleTypeName);
+			emptyBusinessRule.setRuleId(businessRuleId);
+			emptyBusinessRules.add(emptyBusinessRule);
 		}
-		return EmptyBusinessRules;
+		return emptyBusinessRules;
 	}
 
 	private BusinessRule getBusinessRuleObject(String name) {
-		if (name.contains("RangeRule")) {
+		if (name.contains("Range rule")) {
 			return new RangeRule();
 		}
 		return null;
@@ -107,7 +107,7 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 				deTriggerEvents.add(triggerResultSet.getString("trigger_type"));
 			}
 			br.setTriggerEvents(deTriggerEvents);
-			
+		
 			// setting other data in businessRule
 			ruleResultSet.next();
 			br.setErrorMessage(ruleResultSet.getString("ERROR_MESSAGE"));
@@ -115,6 +115,10 @@ public class BusinessRuleDAOImpl implements BusinessRuleDAO {
 					+ "." + ruleResultSet.getString("Column_Ta"));
 			br.setOperator(new Operator(ruleResultSet.getString("NAME"),
 					ruleResultSet.getString("NAME")));
+			
+			//creating TargetDatabase Data
+			
+			
 		}
 		return emptyBusinessRules;
 	}
