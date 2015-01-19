@@ -14,8 +14,8 @@ import domain.TargetDatabase;
 
 public class RangeRule implements BusinessRule {
 	private int ruleId;
-	private String ruleName;
 	private Operator operator;
+	private String restrictedTable;
 	private String restrictedColumn;
 	private ArrayList<String> triggerEvents;
 	private ArrayList<Component> components;
@@ -26,13 +26,17 @@ public class RangeRule implements BusinessRule {
 	};
 
 	public String getGeneratedRule() {
+		String triggerString = getTemplate("src/triggertemplate.txt");
 		String ruleString = getTemplate("src/ruletemplate.txt");
 		ruleString = ruleString.replaceAll("%errormessage%", errorMessage);
 		ruleString = ruleString.replaceAll("%triggerevents%", getTriggerLine());
 		ruleString = ruleString.replaceAll("%declarations%", getDeclarationsLine());
 		ruleString = ruleString.replaceAll("%selectstatements%", getSelectLine());
 		ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
-		return ruleString;
+		triggerString = triggerString.replaceAll("%tablename%", restrictedTable);
+		triggerString = triggerString.replaceAll("%businessrules%", ruleString);
+		triggerString = triggerString.replaceAll("%triggername%", getTriggerName());
+		return triggerString;
 	}
 
 	private String getTemplate(String location) {
@@ -90,19 +94,24 @@ public class RangeRule implements BusinessRule {
 			// TODO create exception: not enough components
 		} else {
 			String comparison = "";
-			comparison += restrictedColumn + " " + operator.toString() + " "
+			comparison += restrictedTable + "."
+					+ restrictedColumn + " "
+					+ operator.toString() + " "
 					+ components.get(0).toString() + " and "
 					+ components.get(1).toString();
 			return comparison;
 		}
 	}
+	private String getTriggerName(){
+		String triggerName = "BRG_";
+		triggerName += "CNS_";
+		triggerName += restrictedColumn.replaceAll("[aeiou]\\B", "").toUpperCase();
+		triggerName += "_RNGR";
+		return triggerName;
+	}
 
 	public void setRuleId(int ruleId) {
 		this.ruleId = ruleId;
-	}
-
-	public void setRuleName(String ruleName) {
-		this.ruleName = ruleName;
 	}
 
 	public void setTriggerEvents(ArrayList<String> triggerEvents) {
@@ -121,6 +130,10 @@ public class RangeRule implements BusinessRule {
 		this.errorMessage = errorMessage;
 	}
 
+	public void setRestrictedTable(String restrictedTable) {
+		this.restrictedTable = restrictedTable;
+	}
+	
 	public void setRestrictedColumn(String restrictedColumn) {
 		this.restrictedColumn = restrictedColumn;
 	}

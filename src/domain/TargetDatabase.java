@@ -31,7 +31,7 @@ public class TargetDatabase {
 		return SSID;
 	}
 	public String getUrl(){
-		return 
+		return "jdbc:" + databaseType + ":thin@" + host + ":" + port + ":" + SSID;
 	}
 	public String getDatabaseType() {
 		return databaseType;

@@ -11,8 +11,6 @@ public interface BusinessRule {
 	
 	public void setRuleId(int ruleId);
 
-	public void setRuleName(String ruleName);
-
 	public void setTriggerEvents(ArrayList<String> triggerEvents);
 
 	public void setOperator(Operator operator);
@@ -20,6 +18,8 @@ public interface BusinessRule {
 	public void setComponents(ArrayList<Component> components);
 	
 	public void setErrorMessage(String errorMessage);
+	
+	public void setRestrictedTable(String restrictedTable);
 	
 	public void setRestrictedColumn(String restrictedColumn);
 	

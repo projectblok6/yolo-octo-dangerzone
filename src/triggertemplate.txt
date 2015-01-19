@@ -5,11 +5,11 @@ begin
     l_oper varchar2 ( 3 );
     l_error_stack varchar2 ( 4000 )
   if inserting then
-    l_oper := 'INS';
+    l_oper := 'Insert';
   elsif updating then
-    l_oper := 'UPD';
+    l_oper := 'Update';
   elsif deleting then
-    l_oper := 'DEL';
+    l_oper := 'Delete';
   end if;
   %businessrules%
   if l_error_stack is not null then
