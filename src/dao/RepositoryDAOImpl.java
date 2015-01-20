@@ -121,8 +121,8 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			// setting other data in businessRule
 			ruleResultSet.next();
 			br.setErrorMessage(ruleResultSet.getString("ERROR_MESSAGE"));
-			br.setRestrictedColumn(ruleResultSet.getString("Table_Ta"));
-			br.setRestrictedTable(ruleResultSet.getString("Column_Ta"));
+			br.setRestrictedColumn(ruleResultSet.getString("Column_Ta"));
+			br.setRestrictedTable(ruleResultSet.getString("Table_Ta"));
 			br.setOperator(new Operator(ruleResultSet.getString("NAME"), ruleResultSet.getString("NAME")));
 			
 			//creating TargetDatabase Data

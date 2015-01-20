@@ -24,8 +24,8 @@ public class WebController {
 			for(BusinessRule b : businessrules){
 				TargetDAOImpl targetDao = new TargetDAOImpl();
 				TargetDatabase targetDatabase = b.getTargetDatabase();
-				//targetDao.connectToTarget(targetDatabase.getUrl(), targetDatabase.getUsername(), targetDatabase.getPassword(), targetDatabase.getDatabaseType());
-				//targetDao.executeGeneratedRule(b.getGeneratedRule());
+				targetDao.connectToTarget(targetDatabase.getUrl(), targetDatabase.getUsername(), targetDatabase.getPassword(), targetDatabase.getDatabaseType());
+				targetDao.executeGeneratedRule(b.getGeneratedRule());
 				System.out.println(b.getGeneratedRule());
 			}
 		} catch (SQLException e) {

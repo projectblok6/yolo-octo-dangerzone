@@ -106,7 +106,8 @@ public class RangeRule implements BusinessRule {
 		String triggerName = "BRG_";
 		triggerName += "CNS_";
 		triggerName += restrictedColumn.replaceAll("[aeiou]\\B", "").toUpperCase();
-		triggerName += "_RNGR";
+		triggerName += "_RNGR_";
+		triggerName += ruleId;
 		return triggerName;
 	}
 

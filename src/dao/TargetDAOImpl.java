@@ -10,6 +10,7 @@ public class TargetDAOImpl implements TargetDAO {
 	public void connectToTarget(String url, String username, String password, String databaseType) {
 		Connection connection = null;
 		try {
+			System.out.println(url);
 			connection = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
