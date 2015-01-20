@@ -12,5 +12,4 @@ public class Main {
 		WebController webController = new WebController();;
 		webController.generateBusinessRules();
 	}
-
 }

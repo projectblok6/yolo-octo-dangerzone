@@ -28,4 +28,16 @@ public interface BusinessRule {
 	public TargetDatabase getTargetDatabase();
 	
 	public int getRuleId();
+	
+	public String getErrorMessage();
+	
+	public String getRestrictedTable();
+	
+	public String getRestrictedColumn();
+	
+	public ArrayList<String> getTriggerEvents();
+	
+	public ArrayList<Component> getComponents();
+	
+	public Operator getOperator();
 }
