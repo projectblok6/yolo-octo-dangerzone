@@ -18,7 +18,7 @@ public class WebController {
 		}
 	}
 	public void generateBusinessRules(){
-		try {
+		/*try {
 			ArrayList<BusinessRule> emptybusinessrules = dao.getEmptyUngeneratedBusinessRules();
 			ArrayList<BusinessRule> businessrules = dao.getFilledBusinessRules(emptybusinessrules);
 			for(BusinessRule b : businessrules){
@@ -30,6 +30,6 @@ public class WebController {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 }
