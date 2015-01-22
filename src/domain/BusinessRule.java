@@ -26,79 +26,84 @@ public class BusinessRule {
 		targetAppId = targetApp;
 	}
 
-	public String getGeneratedRule() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getRuleId() {
+		return ruleId;
 	}
 
 	public void setRuleId(int ruleId) {
-		// TODO Auto-generated method stub
-
+		this.ruleId = ruleId;
 	}
 
-	public void setTriggerEvents(ArrayList<String> triggerEvents) {
-		// TODO Auto-generated method stub
-
+	public int getRuleTypeId() {
+		return ruleTypeId;
 	}
 
-	public void setErrorMessage(String errorMessage) {
-		// TODO Auto-generated method stub
-
+	public void setRuleTypeId(int ruleTypeId) {
+		this.ruleTypeId = ruleTypeId;
 	}
 
-	public void setRestrictedTable(String restrictedTable) {
-		// TODO Auto-generated method stub
-
+	public String getNameCode() {
+		return nameCode;
 	}
 
-	public void setRestrictedColumn(String restrictedColumn) {
-		// TODO Auto-generated method stub
-
+	public void setNameCode(String nameCode) {
+		this.nameCode = nameCode;
 	}
 
-	public void setTargetDatabase(TargetDatabase targetDatabase) {
-		// TODO Auto-generated method stub
-
+	public int getOperatorId() {
+		return operatorId;
 	}
 
-	public TargetDatabase getTargetDatabase() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setOperatorId(int operatorId) {
+		this.operatorId = operatorId;
 	}
 
-	public int getRuleId() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getRestrictedTableId() {
+		return restrictedTableId;
+	}
+
+	public void setRestrictedTableId(int restrictedTableId) {
+		this.restrictedTableId = restrictedTableId;
+	}
+
+	public int getRestrictedColumnId() {
+		return restrictedColumnId;
+	}
+
+	public void setRestrictedColumnId(int restrictedColumnId) {
+		this.restrictedColumnId = restrictedColumnId;
 	}
 
 	public String getErrorMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return errorMessage;
 	}
 
-	public String getRestrictedTable() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
-	public String getRestrictedColumn() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getTargetAppId() {
+		return targetAppId;
+	}
+
+	public void setTargetAppId(int targetAppId) {
+		this.targetAppId = targetAppId;
 	}
 
 	public ArrayList<String> getTriggerEvents() {
-		// TODO Auto-generated method stub
-		return null;
+		return triggerEvents;
 	}
 
-	public ArrayList<Component> getComponents() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setTriggerEvents(ArrayList<String> triggerEvents) {
+		this.triggerEvents = triggerEvents;
 	}
 
-	public Operator getOperator() {
-		// TODO Auto-generated method stub
-		return null;
+	public TargetDatabase getTargetDatabase() {
+		return targetDatabase;
+	}
+
+	public void setTargetDatabase(TargetDatabase targetDatabase) {
+		this.targetDatabase = targetDatabase;
 	}
 
 }
