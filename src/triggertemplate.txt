@@ -1,18 +1,19 @@
-CREATE OR REPLACE TRIGGER %triggername%
- on %tablename% FOR EACH ROW
-begin
-  declare
-    l_oper varchar2 ( 3 );
-    l_error_stack varchar2 ( 4000 )
-  if inserting then
-    l_oper := 'Insert';
-  elsif updating then
-    l_oper := 'Update';
-  elsif deleting then
-    l_oper := 'Delete';
-  end if;
-  %businessrules%
-  if l_error_stack is not null then
-    raise_application_error ( -20800, l_error_stack );
-  end if;
-end %triggername%;
+CREATE OR REPLACE TRIGGER %triggername% 
+BEFORE DELETE OR INSERT OR UPDATE ON 
+%tablename% FOR EACH ROW 
+declare 
+	l_oper varchar2 ( 3 ); 
+    l_error_stack varchar2 ( 4000 ); 
+begin 
+  if inserting then 
+    l_oper := 'Insert'; 
+  elsif updating then 
+    l_oper := 'Update'; 
+  elsif deleting then 
+    l_oper := 'Delete'; 
+  end if; 
+  %businessrules% 
+  if l_error_stack is not null then 
+    raise_application_error ( -20800, l_error_stack ); 
+  end if; 
+end %triggername%; 

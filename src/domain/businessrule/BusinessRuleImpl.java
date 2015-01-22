@@ -1,14 +1,15 @@
 package domain.businessrule;
 
-import generator.Generator;
-
 import java.util.ArrayList;
 
 import domain.Component;
 import domain.Operator;
 import domain.TargetDatabase;
 
-public class RangeRule implements BusinessRule {
+public class BusinessRuleImpl implements BusinessRule {
+	
+	private int noLiteralValues;
+	private int noColumnValues;
 	private int ruleId;
 	private Operator operator;
 	private String restrictedTable;
@@ -17,85 +18,111 @@ public class RangeRule implements BusinessRule {
 	private ArrayList<Component> components;
 	private String errorMessage;
 	private TargetDatabase targetDatabase;
-
-	public RangeRule() {
-	};
-
-	public void setRuleId(int ruleId) {
-		this.ruleId = ruleId;
-	}
-
-	public void setTriggerEvents(ArrayList<String> triggerEvents) {
-		this.triggerEvents = triggerEvents;
-	}
-
-	public void setOperator(Operator operator) {
-		this.operator = operator;
-	}
-
-	public void setComponents(ArrayList<Component> components) {
-		this.components = components;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public void setRestrictedTable(String restrictedTable) {
-		this.restrictedTable = restrictedTable;
-	}
 	
-	public void setRestrictedColumn(String restrictedColumn) {
-		this.restrictedColumn = restrictedColumn;
-	}
-
-	public void setTargetDatabase(TargetDatabase targetDatabase) {
-		this.targetDatabase = targetDatabase;
-	}
-
-	public int getRuleId() {
-		return ruleId;
-	}
-
-	public TargetDatabase getTargetDatabase() {
-		return this.targetDatabase;
+	public BusinessRuleImpl(){
+		
 	}
 
 	@Override
 	public String getGeneratedRule() {
-		Generator gen = new Generator(this);
-		return gen.getGeneratedRule();
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setRuleId(int ruleId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTriggerEvents(ArrayList<String> triggerEvents) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setOperator(Operator operator) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setComponents(ArrayList<Component> components) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setErrorMessage(String errorMessage) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRestrictedTable(String restrictedTable) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRestrictedColumn(String restrictedColumn) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setTargetDatabase(TargetDatabase targetDatabase) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public TargetDatabase getTargetDatabase() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getRuleId() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public String getErrorMessage() {
-		return errorMessage;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String getRestrictedTable() {
-		return restrictedTable;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String getRestrictedColumn() {
-		return restrictedColumn;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public ArrayList<String> getTriggerEvents() {
-		return triggerEvents;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public ArrayList<Component> getComponents() {
-		return components;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public Operator getOperator() {
-		return operator;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	
+
 }
