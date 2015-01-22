@@ -8,20 +8,20 @@ public class BusinessRule {
 	private int ruleTypeId;
 	private String nameCode;
 	private int operatorId;
-	private int restrictedTableId;
-	private int restrictedColumnId;
+	private String restrictedTable;
+	private String restrictedColumn;
 	private String errorMessage;
 	public int targetAppId;
 	private ArrayList<String> triggerEvents;
 	private TargetDatabase targetDatabase;
 	
-	public BusinessRule(int id, int ruleTypeId, String name, int opId, int tabId, int colId, String error, int targetApp){
+	public BusinessRule(int id, int ruleTypeId, String name, int opId, String tabId, String colId, String error, int targetApp){
 		ruleId = id;
 		this.ruleTypeId = ruleTypeId;
 		nameCode = name;
 		operatorId = opId;
-		restrictedTableId = tabId;
-		restrictedColumnId = colId;
+		restrictedTable = tabId;
+		restrictedColumn = colId;
 		errorMessage = error;
 		targetAppId = targetApp;
 	}
@@ -58,20 +58,20 @@ public class BusinessRule {
 		this.operatorId = operatorId;
 	}
 
-	public int getRestrictedTableId() {
-		return restrictedTableId;
+	public String getRestrictedTable() {
+		return restrictedTable;
 	}
 
-	public void setRestrictedTableId(int restrictedTableId) {
-		this.restrictedTableId = restrictedTableId;
+	public void setRestrictedTable(String restrictedTableId) {
+		this.restrictedTable = restrictedTableId;
 	}
 
-	public int getRestrictedColumnId() {
-		return restrictedColumnId;
+	public String getRestrictedColumn() {
+		return restrictedColumn;
 	}
 
-	public void setRestrictedColumnId(int restrictedColumnId) {
-		this.restrictedColumnId = restrictedColumnId;
+	public void setRestrictedColumn(String restrictedColumnId) {
+		this.restrictedColumn = restrictedColumnId;
 	}
 
 	public String getErrorMessage() {
@@ -85,6 +85,8 @@ public class BusinessRule {
 	public int getTargetAppId() {
 		return targetAppId;
 	}
+	
+	
 
 	public void setTargetAppId(int targetAppId) {
 		this.targetAppId = targetAppId;

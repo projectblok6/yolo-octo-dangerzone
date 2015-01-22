@@ -21,34 +21,38 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	public RepositoryDAOImpl() throws SQLException {
 		connectToRepository();
 	}
-	
-	public ArrayList<BusinessRule> getAllBusinessRules() throws SQLException{
+
+	public ArrayList<BusinessRule> getAllBusinessRules() throws SQLException {
 		Statement stmt = connection.createStatement();
-		 ResultSet resultSet = stmt.executeQuery("SELECT BR_ID, BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,Businessrule.Name_Code,Businessrule.Table_Ta,Businessrule.Column_Ta,"
+		ResultSet resultSet = stmt
+				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TEMPLATE,BUSINESSRULETYPE.TEMPLATE"
 						+ "DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE"
 						+ " FROM BUSINESSRULE"
 						+ " INNER JOIN OPERATOR_TYPE"
 						+ " ON BUSINESSRULE.OPERATOR_TYPE_OT_ID=OPERATOR_TYPE.OT_ID"
 						+ " INNER JOIN TARGETAPPLICATION"
-						+ "	ON TARGETAPPLICATION.TA_ID=BUSINESSRULE.TARGETAPPLICATION_TA_ID"
+						+ " ON TARGETAPPLICATION.TA_ID=BUSINESSRULE.TARGETAPPLICATION_TA_ID"
 						+ " INNER JOIN DATABASE_TYPE"
 						+ " ON DATABASE_TYPE.DT_ID=TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
+						+ " INNER JOIN BUSINESSRULETYPE"
+						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID=BUSINESRULETYPE.BRT_ID"
 						+ " WHERE STATUS = 0 OR STATUS = 2");
-		
-		 while(resultSet.next()){
+
+		while (resultSet.next()) {
 			int ruleId = resultSet.getInt("BR_ID");
 			String nameCode = resultSet.getString("NAME_CODE");
-			int colTa = resultSet.getInt("COLUMN_TA");
-			int tabTa = resultSet.getInt("TABLE_TA");
+			String colTa = resultSet.getString("COLUMN_TA");
+			String tabTa = resultSet.getString("TABLE_TA");
 			String errorMessage = resultSet.getString("ERROR_MESSAGE");
 			int operator = resultSet.getInt("OPERATOR_TYPE_OT_ID");
 			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
 			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
-			
-			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode, operator, tabTa, colTa, errorMessage, targetAppId);
+
+			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
+					operator, tabTa, colTa, errorMessage, targetAppId);
 			allBusinessRules.add(b);
-		 }
-		 return allBusinessRules;
+		}
+		return allBusinessRules;
 	}
 
 	private void connectToRepository() {
@@ -62,7 +66,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		if (connection != null) {
 			this.connection = connection;
 		} else {
-			//TODO throw no connection exception
+			// TODO throw no connection exception
 		}
 	}
 }
