@@ -1,7 +1,8 @@
 package dao;
 
 import java.util.ArrayList;
-import domain.businessrule.BusinessRule;
+
+import domain.BusinessRule;
 
 public interface RepositoryDAO {
 }

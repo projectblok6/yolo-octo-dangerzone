@@ -3,7 +3,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.RepositoryDAOImpl;
-import domain.businessrule.BusinessRule;
+import domain.BusinessRule;
 
 
 public class Main {

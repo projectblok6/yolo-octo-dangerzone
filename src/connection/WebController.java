@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import dao.RepositoryDAOImpl;
 import dao.TargetDAOImpl;
+import domain.BusinessRule;
 import domain.TargetDatabase;
-import domain.businessrule.BusinessRule;
 
 public class WebController {
 	private RepositoryDAOImpl dao;
