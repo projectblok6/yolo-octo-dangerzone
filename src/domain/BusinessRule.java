@@ -20,14 +20,14 @@ public class BusinessRule {
 	
 	public BusinessRule(int id, int ruleTypeId, String name, String operName, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs){
 		ruleId = id;
-		ruleTypeId = this.ruleTypeId;
+		this.ruleTypeId = ruleTypeId;
 		nameCode = name;
 		operatorName = operName;
 		restrictedTable = tabId;
 		restrictedColumn = colId;
 		errorMessage = error;
 		targetAppId = targetApp;
-		template = this.template;
+		this.template = template;
 		triggerEvents = trigs;
 	}
 	

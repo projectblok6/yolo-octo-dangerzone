@@ -26,7 +26,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt
 				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,BUSINESSRULE.OPERATOR_TYPE_OT_ID,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TRIGGER_TEMPLATE"
-						+ ",DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE, BUSINESSRULE.TARGETAPPLICATION_TA_ID, BUSINESSRULE.BUSINESSRULETYPE_BRT_ID"
+						+ ",DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE,TARGETAPPLICATION_TA_ID, BUSINESSRULE.BUSINESSRULETYPE_BRT_ID"
 						+ " FROM BUSINESSRULE"
 						+ " INNER JOIN OPERATOR_TYPE"
 						+ " ON BUSINESSRULE.OPERATOR_TYPE_OT_ID = OPERATOR_TYPE.OT_ID"
@@ -45,16 +45,15 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			String tabTa = resultSet.getString("TABLE_TA");
 			String errorMessage = resultSet.getString("ERROR_MESSAGE");
 			int operatorId = resultSet.getInt("OPERATOR_TYPE_OT_ID");
+			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
+			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
 			ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);
 			
 			String operatorName = "";
 			while(operatorSet.next()){
 				operatorName = operatorSet.getString("NAME");
 			}
-			
-			
-			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
-			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
+
 			String template = getTemplate(ruleTypeId);
 			ArrayList<String> triggers = getTriggers(ruleId);
 

@@ -16,17 +16,17 @@ public class Generator {
 
 	public String getGeneratedRule() {
 		String triggerString = getTemplate("src/triggertemplate.txt");
-		String ruleString = getTemplate("src/ruletemplate.txt");
-		ruleString = ruleString.replaceAll("%errormessage%", rule.getErrorMessage());
-		ruleString = ruleString.replaceAll("%triggerevents%", getTriggerLine());
-		ruleString = ruleString.replaceAll("%declarations%",
+		//String ruleString = getTemplate("src/ruletemplate.txt");
+		triggerString = triggerString.replaceAll("%errormessage%", rule.getErrorMessage());
+		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
+		triggerString = triggerString.replaceAll("%declarations%",
 				getDeclarationsLine());
-		ruleString = ruleString.replaceAll("%selectstatements%",
+		triggerString = triggerString.replaceAll("%selectstatements%",
 				rule.getTemplate());
 		//ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString
 				.replaceAll("%tablename%", rule.getRestrictedTable());
-		triggerString = triggerString.replaceAll("%businessrules%", ruleString);
+		//triggerString = triggerString.replaceAll("%businessrules%", triggerString);
 		triggerString = triggerString.replaceAll("%triggername%",
 				getTriggerName());
 		return triggerString;
@@ -56,12 +56,19 @@ public class Generator {
 		if (rule.getTriggerEvents().size() == 0) {
 			return null;
 			// TODO create exception: no trigger events
-		} else {
+		} else if(rule.getTriggerEvents().size() == 1) {
+			String triggerLine = "";
+			for (String triggerEvent : rule.getTriggerEvents()) {
+				triggerLine += triggerEvent;
+			}
+			return triggerLine;
+		} else{
 			String triggerLine = "";
 			for (String triggerEvent : rule.getTriggerEvents()) {
 				triggerLine += triggerEvent + ", ";
 			}
-			return triggerLine.substring(0, triggerLine.length() - 2);
+			
+			return triggerLine;
 		}
 	}
 
