@@ -9,7 +9,7 @@ public class BusinessRule {
 	private int ruleId;
 	private int ruleTypeId;
 	private String nameCode;
-	private int operatorId;
+	private String operatorName;
 	private String restrictedTable;
 	private String restrictedColumn;
 	private String errorMessage;
@@ -18,11 +18,11 @@ public class BusinessRule {
 	private ArrayList<String> triggerEvents;
 	private TargetDatabase targetDatabase;
 	
-	public BusinessRule(int id, int ruleTypeId, String name, int operId, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs){
+	public BusinessRule(int id, int ruleTypeId, String name, String operName, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs){
 		ruleId = id;
 		ruleTypeId = this.ruleTypeId;
 		nameCode = name;
-		operatorId = operId;
+		operatorName = operName;
 		restrictedTable = tabId;
 		restrictedColumn = colId;
 		errorMessage = error;
@@ -60,12 +60,12 @@ public class BusinessRule {
 		this.nameCode = nameCode;
 	}
 
-	public int getOperatorId() {
-		return operatorId;
+	public String getOperator() {
+		return operatorName;
 	}
 
-	public void setOperatorId(int operatorId) {
-		this.operatorId = operatorId;
+	public void setOperatorId(String operatorId) {
+		this.operatorName = operatorId;
 	}
 
 	public String getRestrictedTable() {

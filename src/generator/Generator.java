@@ -22,8 +22,8 @@ public class Generator {
 		ruleString = ruleString.replaceAll("%declarations%",
 				getDeclarationsLine());
 		ruleString = ruleString.replaceAll("%selectstatements%",
-				getSelectLine());
-		ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
+				rule.getTemplate());
+		//ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString
 				.replaceAll("%tablename%", rule.getRestrictedTable());
 		triggerString = triggerString.replaceAll("%businessrules%", ruleString);
@@ -67,32 +67,19 @@ public class Generator {
 
 	private String getDeclarationsLine() {
 		String declarationLine = "";
-		for (Component component : rule.getComponents()) {
-			// declarationLine += component.getDeclarationLine();
-		}
+//		for (Component component : rule.getComponents()) {
+//			// declarationLine += component.getDeclarationLine();
+//		}
 		return declarationLine;
 	}
 
-	private String getSelectLine() {
-		String declarationLine = "";
-		for (Component component : rule.getComponents()) {
-			// declarationLine += component.getSelectStatement();
-		}
-		return declarationLine;
-	}
-
-	private String getComparisonLine() {
-		if (rule.getComponents().size() < 2) {
-			return null;
-			// TODO create exception: not enough components
-		} else {
-			String comparison = "";
-			comparison += rule.getRestrictedTable() + "." + rule.getRestrictedColumn() + " "
-					+ rule.getOperator().toString() + " " + rule.getComponents().get(0).toString()
-					+ " and " + rule.getComponents().get(1).toString();
-			return comparison;
-		}
-	}
+//	private String getSelectLine() {
+//		String declarationLine = "";
+//		for (Component component : rule.getComponents()) {
+//			// declarationLine += component.getSelectStatement();
+//		}
+//		return declarationLine;
+//	}
 
 	private String getTriggerName() {
 		String triggerName = "BRG_";

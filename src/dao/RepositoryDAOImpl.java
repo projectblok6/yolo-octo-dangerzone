@@ -25,7 +25,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	public ArrayList<BusinessRule> getAllUngeneratedBusinessRules() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt
-				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,BUSINESSRULE.OPERATOR_TYPE_OT_ID,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TRIGGER_TEMPLATE"
+				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,BUSINESSRULE.OPERATOR_TYPE_OT_ID,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TRIGGER_TEMPLATE"
 						+ ",DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE, BUSINESSRULE.TARGETAPPLICATION_TA_ID, BUSINESSRULE.BUSINESSRULETYPE_BRT_ID"
 						+ " FROM BUSINESSRULE"
 						+ " INNER JOIN OPERATOR_TYPE"
@@ -33,9 +33,9 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 						+ " INNER JOIN TARGETAPPLICATION"
 						+ " ON TARGETAPPLICATION.TA_ID=BUSINESSRULE.TARGETAPPLICATION_TA_ID"
 						+ " INNER JOIN DATABASE_TYPE"
-						+ " ON DATABASE_TYPE.DT_ID=TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
+						+ " ON DATABASE_TYPE.DT_ID = TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
 						+ " INNER JOIN BUSINESSRULETYPE"
-						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID=BUSINESSRULETYPE.BRT_ID"
+						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID = BUSINESSRULETYPE.BRT_ID"
 						+ " WHERE STATUS = 0 OR STATUS = 2");
 
 		while (resultSet.next()) {
@@ -44,14 +44,22 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			String colTa = resultSet.getString("COLUMN_TA");
 			String tabTa = resultSet.getString("TABLE_TA");
 			String errorMessage = resultSet.getString("ERROR_MESSAGE");
-			int operator = resultSet.getInt("OPERATOR_TYPE_OT_ID");
+			int operatorId = resultSet.getInt("OPERATOR_TYPE_OT_ID");
+			ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);
+			
+			String operatorName = "";
+			while(operatorSet.next()){
+				operatorName = operatorSet.getString("NAME");
+			}
+			
+			
 			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
 			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
 			String template = getTemplate(ruleTypeId);
 			ArrayList<String> triggers = getTriggers(ruleId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operator, tabTa, colTa, errorMessage, template, targetAppId, triggers);
+					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers);
 			allBusinessRules.add(b);
 		}
 		return allBusinessRules;
