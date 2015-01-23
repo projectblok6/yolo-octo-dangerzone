@@ -47,6 +47,13 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			int operatorId = resultSet.getInt("OPERATOR_TYPE_OT_ID");
 			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
 			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
+			String dbUser = resultSet.getString("DB_USERNAME");
+			String dbPass = resultSet.getString("DB_PASSWORD");
+			String host = resultSet.getString("HOST");
+			String port = resultSet.getString("PORT");
+			String ssid = resultSet.getString("SSID");
+			String type = resultSet.getString("TYPE");
+			TargetDatabase tdb = new TargetDatabase(dbUser, dbPass, host, port, ssid, type);
 			ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);
 			
 			String operatorName = "";
@@ -55,10 +62,11 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			}
 
 			String template = getTemplate(ruleTypeId);
+			ArrayList<String> vals = getValues(ruleId);
 			ArrayList<String> triggers = getTriggers(ruleId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers);
+					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers, vals, tdb);
 			allBusinessRules.add(b);
 		}
 		return allBusinessRules;
@@ -83,6 +91,25 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			triggers.add(t);
 		}
 		return triggers;
+	}
+	
+	public ArrayList<String> getValues(int br) throws SQLException{
+		Statement stmt = connection.createStatement();
+		ResultSet resultSet = stmt.executeQuery("SELECT VALUE, TYPE FROM LITERAL_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
+		ArrayList<String> values = new ArrayList<String>();
+		
+		String v = "";
+		while(resultSet.next()){
+			if(resultSet.getString("TYPE").equals("varchar")){
+				v = resultSet.getString("VALUE");
+				v = "'" + v + "'";
+				values.add(v);
+			} else{
+				v = resultSet.getString("VALUE");
+				values.add(v);
+			}
+		}
+		return values;
 	}
 
 	private void connectToRepository() {

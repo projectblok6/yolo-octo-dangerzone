@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
+
+
+
+import org.apache.commons.lang3.StringUtils;
+
 import domain.BusinessRule;
 
 public class Generator {
@@ -21,9 +26,9 @@ public class Generator {
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
 		triggerString = triggerString.replaceAll("%declarations%",
 				getDeclarationsLine());
-		triggerString = triggerString.replaceAll("%selectstatements%",
-				rule.getTemplate());
-		//ruleString = ruleString.replaceAll("%comparison%", getComparisonLine());
+		//triggerString = triggerString.replaceAll("%selectstatements%",
+				//rule.getTemplate());
+		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString
 				.replaceAll("%tablename%", rule.getRestrictedTable());
 		//triggerString = triggerString.replaceAll("%businessrules%", triggerString);
@@ -87,6 +92,18 @@ public class Generator {
 //		}
 //		return declarationLine;
 //	}
+	
+	private String getComparisonLine(){
+		String template = rule.getTemplate();
+		template = template.replaceAll("%column%", rule.getRestrictedColumn());
+		template = template.replaceAll("%operator%", rule.getOperator());
+		int count = StringUtils.countMatches(template, "%literalvalue%");
+		
+		for(int i = 0; i <= count-1; i++){
+			template = template.replaceFirst("%literalvalue%", rule.getValues().get(i).toString());
+		}
+		return template;
+	}
 
 	private String getTriggerName() {
 		String triggerName = "BRG_";

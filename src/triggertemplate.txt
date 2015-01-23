@@ -30,5 +30,3 @@ end;
     raise_application_error ( -20800, l_error_stack ); 
   end if; 
 end %triggername%;
-
-%triggerevents%
