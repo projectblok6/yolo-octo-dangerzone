@@ -18,7 +18,7 @@ public class BusinessRule {
 	private ArrayList<String> triggerEvents;
 	private TargetDatabase targetDatabase;
 	
-	public BusinessRule(int id, int ruleTypeId, String name, int operId, String tabId, String colId, String error, String template, int targetApp){
+	public BusinessRule(int id, int ruleTypeId, String name, int operId, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs){
 		ruleId = id;
 		ruleTypeId = this.ruleTypeId;
 		nameCode = name;
@@ -28,6 +28,7 @@ public class BusinessRule {
 		errorMessage = error;
 		targetAppId = targetApp;
 		template = this.template;
+		triggerEvents = trigs;
 	}
 	
 	public String getGeneratedRule(){

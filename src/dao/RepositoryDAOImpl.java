@@ -48,9 +48,10 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
 			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
 			String template = getTemplate(ruleTypeId);
+			ArrayList<String> triggers = getTriggers(ruleId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operator, tabTa, colTa, errorMessage, template, targetAppId);
+					operator, tabTa, colTa, errorMessage, template, targetAppId, triggers);
 			allBusinessRules.add(b);
 		}
 		return allBusinessRules;
@@ -64,6 +65,17 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			template = resultSet.getString("TEMPLATE");
 		}
 		return template;
+	}
+	
+	public ArrayList<String> getTriggers(int br) throws SQLException{
+		Statement stmt = connection.createStatement();
+		ResultSet resultSet = stmt.executeQuery("SELECT TRIGGER_TYPE FROM TRIGGER_EVENT WHERE BUSINESSRULE_BR_ID = " + br);
+		ArrayList<String> triggers = new ArrayList<String>();
+		while(resultSet.next()){
+			String t = resultSet.getString("TRIGGER_TYPE");
+			triggers.add(t);
+		}
+		return triggers;
 	}
 
 	private void connectToRepository() {
