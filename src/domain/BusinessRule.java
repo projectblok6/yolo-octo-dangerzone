@@ -1,5 +1,7 @@
 package domain;
 
+import generator.Generator;
+
 import java.util.ArrayList;
 
 public class BusinessRule {
@@ -11,19 +13,26 @@ public class BusinessRule {
 	private String restrictedTable;
 	private String restrictedColumn;
 	private String errorMessage;
+	private String template;
 	public int targetAppId;
 	private ArrayList<String> triggerEvents;
 	private TargetDatabase targetDatabase;
 	
-	public BusinessRule(int id, int ruleTypeId, String name, int opId, String tabId, String colId, String error, int targetApp){
+	public BusinessRule(int id, int ruleTypeId, String name, int operId, String tabId, String colId, String error, String template, int targetApp){
 		ruleId = id;
-		this.ruleTypeId = ruleTypeId;
+		ruleTypeId = this.ruleTypeId;
 		nameCode = name;
-		operatorId = opId;
+		operatorId = operId;
 		restrictedTable = tabId;
 		restrictedColumn = colId;
 		errorMessage = error;
 		targetAppId = targetApp;
+		template = this.template;
+	}
+	
+	public String getGeneratedRule(){
+		Generator gen = new Generator(this);
+		return gen.getGeneratedRule();
 	}
 
 	public int getRuleId() {
@@ -86,7 +95,9 @@ public class BusinessRule {
 		return targetAppId;
 	}
 	
-	
+	public String getTemplate(){
+		return this.template;
+	}
 
 	public void setTargetAppId(int targetAppId) {
 		this.targetAppId = targetAppId;

@@ -22,20 +22,20 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		connectToRepository();
 	}
 
-	public ArrayList<BusinessRule> getAllBusinessRules() throws SQLException {
+	public ArrayList<BusinessRule> getAllUngeneratedBusinessRules() throws SQLException {
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt
-				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TEMPLATE,BUSINESSRULETYPE.TEMPLATE"
-						+ "DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE"
+				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,OPERATOR_TYPE.NAME,BUSINESSRULE.OPERATOR_TYPE_OT_ID,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TRIGGER_TEMPLATE"
+						+ ",DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE, BUSINESSRULE.TARGETAPPLICATION_TA_ID, BUSINESSRULE.BUSINESSRULETYPE_BRT_ID"
 						+ " FROM BUSINESSRULE"
 						+ " INNER JOIN OPERATOR_TYPE"
-						+ " ON BUSINESSRULE.OPERATOR_TYPE_OT_ID=OPERATOR_TYPE.OT_ID"
+						+ " ON BUSINESSRULE.OPERATOR_TYPE_OT_ID = OPERATOR_TYPE.OT_ID"
 						+ " INNER JOIN TARGETAPPLICATION"
 						+ " ON TARGETAPPLICATION.TA_ID=BUSINESSRULE.TARGETAPPLICATION_TA_ID"
 						+ " INNER JOIN DATABASE_TYPE"
 						+ " ON DATABASE_TYPE.DT_ID=TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
 						+ " INNER JOIN BUSINESSRULETYPE"
-						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID=BUSINESRULETYPE.BRT_ID"
+						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID=BUSINESSRULETYPE.BRT_ID"
 						+ " WHERE STATUS = 0 OR STATUS = 2");
 
 		while (resultSet.next()) {
@@ -47,12 +47,23 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			int operator = resultSet.getInt("OPERATOR_TYPE_OT_ID");
 			int targetAppId = resultSet.getInt("TARGETAPPLICATION_TA_ID");
 			int ruleTypeId = resultSet.getInt("BUSINESSRULETYPE_BRT_ID");
+			String template = getTemplate(ruleTypeId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operator, tabTa, colTa, errorMessage, targetAppId);
+					operator, tabTa, colTa, errorMessage, template, targetAppId);
 			allBusinessRules.add(b);
 		}
 		return allBusinessRules;
+	}
+	
+	public String getTemplate(int brt) throws SQLException{
+		Statement stmt = connection.createStatement();
+		ResultSet resultSet = stmt.executeQuery("SELECT BUSINESSRULETYPE.TEMPLATE FROM BUSINESSRULETYPE WHERE BRT_ID = " + brt);
+		String template = "";
+		while(resultSet.next()){
+			template = resultSet.getString("TEMPLATE");
+		}
+		return template;
 	}
 
 	private void connectToRepository() {
