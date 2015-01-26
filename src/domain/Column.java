@@ -23,7 +23,4 @@ public class Column {
 	public String getType(){
 		return type;
 	}
-	public String toString() {
-		return tableName + "." + columnName;
-	}
 }

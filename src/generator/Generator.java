@@ -26,7 +26,8 @@ public class Generator {
 		//String ruleString = getTemplate("src/ruletemplate.txt");
 		triggerString = triggerString.replaceAll("%errormessage%", rule.getErrorMessage());
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
-		//triggerString = triggerString.replaceAll("%declarations%", getDeclarationsLine());
+		triggerString = triggerString.replaceAll("%declarations%", getDeclarationLine());
+		triggerString = triggerString.replaceAll("%selectstatements%", getSelectLine());
 		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString.replaceAll("%tablename%", rule.getRestrictedTable());
 		triggerString = triggerString.replaceAll("%businessrules%", triggerString);
@@ -66,23 +67,36 @@ public class Generator {
 			return triggerLine;
 		} else{
 			String triggerLine = "";
-			for (String triggerEvent : rule.getTriggerEvents()) {
-				triggerLine += triggerEvent + ", ";
+			
+			for(int i = 0; i <= rule.getTriggerEvents().size() - 1; i++){
+				triggerLine += "'" + rule.getTriggerEvents().get(i) + "'";
+				if(i != rule.getTriggerEvents().size() - 1){
+					triggerLine += ", ";
+				}
 			}
 			
 			return triggerLine;
 		}
 	}
 
-	private String getDeclarationsLine() {
+	private String getDeclarationLine(){
 		String declarationLine = "";
-		for (Column c : rule.getColumns()) {
-			declarationLine += "SELECT " + c.getColumnName();
-			declarationLine += "INTO "
-			declarationLine += "FROM " + c.getTableName();
-			declarationLIn
+		for (Column c : rule.getColumns()){
+			declarationLine += "l_" + c.getColumnName() + " " + c.getType() + "(4000);";
 		}
 		return declarationLine;
+	}
+	
+	private String getSelectLine() {
+		String selectLine = "";
+		for (Column c : rule.getColumns()) {
+			selectLine += "SELECT " + c.getColumnName();
+			selectLine += " INTO l_"+ c.getColumnName();
+			selectLine += " FROM " + c.getTableName();
+			selectLine += " WHERE " + c.getColumnName() + " = ";
+			selectLine += c.getUniqueValue() + ";";
+		}
+		return selectLine;
 	}
 	
 	private String getComparisonLine(){
@@ -91,23 +105,22 @@ public class Generator {
 		template = template.replaceAll("%operator%", rule.getOperator());
 		int countvalues = StringUtils.countMatches(template, "%literalvalue%");
 		int countcolumns = StringUtils.countMatches(template, "%column%");
-		System.out.println(countcolumns);
 		
 		for(int i = 0; i <= countvalues-1; i++){
 			template = template.replaceFirst("%literalvalue%", rule.getValues().get(i).toString());
 		}
 		for(int i = 0; i <= countcolumns-1; i++){
-			template = template.replaceFirst("%column%", rule.getColumns().get(i).toString());
+			String columnString = "";
+			columnString = "l_" + rule.getColumns().get(i).getColumnName();
+			template = template.replaceFirst("%column%", columnString);
 		}
 		return template;
 	}
 
 	private String getTriggerName() {
 		String triggerName = "BRG_";
-		triggerName += "CNS_";
-		triggerName += rule.getRestrictedColumn().replaceAll("[aeiou]\\B", "")
-				.toUpperCase();
-		triggerName += "_RNGR_";
+		triggerName += rule.getRestrictedColumn().replaceAll("[aeiou]\\B", "").toUpperCase();
+		triggerName += "_" + rule.getNameCode() + "_";
 		triggerName += rule.getRuleId();
 		return triggerName;
 	}
