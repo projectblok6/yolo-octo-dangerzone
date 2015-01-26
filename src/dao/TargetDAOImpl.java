@@ -26,6 +26,7 @@ public class TargetDAOImpl implements TargetDAO {
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.execute(code);
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

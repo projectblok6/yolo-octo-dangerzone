@@ -1,9 +1,5 @@
 package connection;
 
-/**
- * @author Arpit Mandliya
- */
-
 import java.sql.SQLException;
 
 import javax.ws.rs.GET;

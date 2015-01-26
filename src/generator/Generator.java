@@ -22,8 +22,7 @@ public class Generator {
 	}
 
 	public String getGeneratedRule() {
-		String triggerString = getTemplate("src/triggertemplate.txt");
-		//String ruleString = getTemplate("src/ruletemplate.txt");
+		String triggerString = rule.getTemplate();
 		triggerString = triggerString.replaceAll("%errormessage%", rule.getErrorMessage());
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
 		triggerString = triggerString.replaceAll("%declarations%", getDeclarationLine());
@@ -34,26 +33,7 @@ public class Generator {
 		triggerString = triggerString.replaceAll("%triggername%", getTriggerName());
 		return triggerString;
 	}
-
-	private String getTemplate(String location) {
-		// template inlezen
-		File file = new File(location);
-		BufferedReader bf = null;
-		try {
-			bf = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Scanner sc = new Scanner(bf);
-		String ruleString = "";
-		while (sc.hasNext()) {
-			String line = sc.nextLine();
-			ruleString += line + "\n";
-		}
-		return ruleString;
-	}
-
+	
 	private String getTriggerLine() {
 		// if no trigger events
 		if (rule.getTriggerEvents().size() == 0) {

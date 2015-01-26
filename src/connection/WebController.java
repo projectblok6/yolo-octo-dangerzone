@@ -19,14 +19,20 @@ public class WebController {
 	}
 	public void generateBusinessRules(){
 		try {
-			ArrayList<BusinessRule> businessrules = dao.getAllUngeneratedBusinessRules();
-			//ArrayList<BusinessRule> businessrules = dao.getFilledBusinessRules(emptybusinessrules);
-			for(BusinessRule b : businessrules){
+			dao.connectToRepository();
+			ArrayList<BusinessRule> businessRules = dao.getAllUngeneratedBusinessRules();
+			for(BusinessRule b : businessRules){
+				int businessRuleId = b.getRuleId();
+				String businessRuleCode = b.getGeneratedRule();
+				b.setGeneratedCode(businessRuleCode);
+				dao.setGeneratedBusinessRules(businessRuleCode, businessRuleId);
+				
 				TargetDAOImpl targetDao = new TargetDAOImpl();
 				TargetDatabase targetDatabase = b.getTargetDatabase();
 				targetDao.connectToTarget(targetDatabase.getUrl(), targetDatabase.getUsername(), targetDatabase.getPassword(), targetDatabase.getDatabaseType());
-				targetDao.executeGeneratedRule(b.getGeneratedRule());
-				System.out.println(b.getGeneratedRule());
+				targetDao.executeGeneratedRule(businessRuleCode);
+				dao.setStatus(businessRuleId, 2);
+				System.out.println(businessRuleCode);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

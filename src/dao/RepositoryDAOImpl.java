@@ -19,7 +19,6 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	private final String password = "tho6_2014_2c_team3";
 
 	public RepositoryDAOImpl() throws SQLException {
-		connectToRepository();
 	}
 
 	public ArrayList<BusinessRule> getAllUngeneratedBusinessRules() throws SQLException {
@@ -58,20 +57,36 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			String operatorName = getOperator(operatorId);
 			TargetDatabase tdb = new TargetDatabase(dbUser, dbPass, host, port, ssid, type);
 			
-			String template = getTemplate(ruleTypeId);
+			String template = getTemplate(targetAppId);
+			String operatorTemplate = getOperatorTemplate(ruleTypeId);
 			ArrayList<Column> columns = getColumns(ruleId);
 			ArrayList<String> vals = getValues(ruleId);
 			ArrayList<String> triggers = getTriggers(ruleId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers, vals, columns, tdb);
+					operatorName, tabTa, colTa, errorMessage, template, operatorTemplate, targetAppId, triggers, vals, columns, tdb);
 			allBusinessRules.add(b);
 		}
 		stmt.close();
 		return allBusinessRules;
 	}
-	
-	public String getTemplate(int brt) throws SQLException{
+
+	private String getTemplate(int targetAppId) throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet resultSet = stmt.executeQuery("SELECT ta_id, DATABASE_TYPE.TRIGGER_TEMPLATE"
+				+ " FROM database_type"
+				+ " INNER JOIN targetapplication"
+				+ " ON targetapplication.database_type_dt_id = Database_Type.Dt_Id"
+				+ " WHERE targetapplication.ta_id =" + targetAppId);
+		String template = "";
+		while(resultSet.next()){
+			template = resultSet.getString("TRIGGER_TEMPLATE");
+		}
+		stmt.close();
+		return template;
+	}
+
+	public String getOperatorTemplate(int brt) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt.executeQuery("SELECT BUSINESSRULETYPE.TEMPLATE FROM BUSINESSRULETYPE WHERE BRT_ID = " + brt);
 		String template = "";
@@ -137,10 +152,27 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			Column column = new Column(name, table, uniqueValue, type);
 			columns.add(column);
 		}
+		stmt.close();
 		return columns;
 	}
 
-	private void connectToRepository() {
+	public void setGeneratedBusinessRules(String businessRule, int businessRuleId) throws SQLException{
+		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET GENERATED_CODE=? WHERE BR_ID = ?");
+		stmt.setString(1, businessRule);
+		stmt.setInt(2, businessRuleId);
+		stmt.execute();
+		stmt.close();
+	}
+	
+	public void setStatus(int businessRuleId, int Status) throws SQLException{
+		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET STATUS=? WHERE BR_ID = ?");
+		stmt.setInt(1, Status);
+		stmt.setInt(2, businessRuleId);
+		stmt.execute();
+		stmt.close();
+	}
+
+	public void connectToRepository() {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(url, username, password);
@@ -153,5 +185,9 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		} else {
 			// TODO throw no connection exception
 		}
+	}
+	
+	public void closeConnection() throws SQLException{
+		connection.close();
 	}
 }
