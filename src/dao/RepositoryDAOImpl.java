@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import domain.BusinessRule;
+import domain.Column;
 import domain.TargetDatabase;
 
 public class RepositoryDAOImpl implements RepositoryDAO {
@@ -58,11 +59,12 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			TargetDatabase tdb = new TargetDatabase(dbUser, dbPass, host, port, ssid, type);
 			
 			String template = getTemplate(ruleTypeId);
+			ArrayList<Column> columns = getColumns(ruleId);
 			ArrayList<String> vals = getValues(ruleId);
 			ArrayList<String> triggers = getTriggers(ruleId);
 
 			BusinessRule b = new BusinessRule(ruleId, ruleTypeId, nameCode,
-					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers, vals, tdb);
+					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers, vals, columns, tdb);
 			allBusinessRules.add(b);
 		}
 		stmt.close();
@@ -121,6 +123,21 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		}
 		stmt.close();
 		return values;
+	}
+	
+	public ArrayList<Column> getColumns(int br) throws SQLException{
+		Statement stmt = connection.createStatement();
+		ResultSet resultSet = stmt.executeQuery("SELECT NAME, TABLE_NAME, UNIQUE_VALUE, COLUMN_TYPE FROM COLUMN_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
+		ArrayList<Column> columns = new ArrayList<Column>();
+		while(resultSet.next()){
+			String name = resultSet.getString("NAME");
+			String table = resultSet.getString("TABLE_NAME");
+			String uniqueValue = resultSet.getString("UNIQUE_VALUE");
+			String type = resultSet.getString("COLUMN_TYPE");
+			Column column = new Column(name, table, uniqueValue, type);
+			columns.add(column);
+		}
+		return columns;
 	}
 
 	private void connectToRepository() {

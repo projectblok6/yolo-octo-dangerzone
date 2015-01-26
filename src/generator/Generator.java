@@ -8,9 +8,11 @@ import java.util.Scanner;
 
 
 
+
 import org.apache.commons.lang3.StringUtils;
 
 import domain.BusinessRule;
+import domain.Column;
 
 public class Generator {
 	private BusinessRule rule;
@@ -24,16 +26,11 @@ public class Generator {
 		//String ruleString = getTemplate("src/ruletemplate.txt");
 		triggerString = triggerString.replaceAll("%errormessage%", rule.getErrorMessage());
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
-		triggerString = triggerString.replaceAll("%declarations%",
-				getDeclarationsLine());
-		//triggerString = triggerString.replaceAll("%selectstatements%",
-				//rule.getTemplate());
+		//triggerString = triggerString.replaceAll("%declarations%", getDeclarationsLine());
 		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
-		triggerString = triggerString
-				.replaceAll("%tablename%", rule.getRestrictedTable());
-		//triggerString = triggerString.replaceAll("%businessrules%", triggerString);
-		triggerString = triggerString.replaceAll("%triggername%",
-				getTriggerName());
+		triggerString = triggerString.replaceAll("%tablename%", rule.getRestrictedTable());
+		triggerString = triggerString.replaceAll("%businessrules%", triggerString);
+		triggerString = triggerString.replaceAll("%triggername%", getTriggerName());
 		return triggerString;
 	}
 
@@ -79,28 +76,28 @@ public class Generator {
 
 	private String getDeclarationsLine() {
 		String declarationLine = "";
-//		for (Component component : rule.getComponents()) {
-//			// declarationLine += component.getDeclarationLine();
-//		}
+		for (Column c : rule.getColumns()) {
+			declarationLine += "SELECT " + c.getColumnName();
+			declarationLine += "INTO "
+			declarationLine += "FROM " + c.getTableName();
+			declarationLIn
+		}
 		return declarationLine;
 	}
-
-//	private String getSelectLine() {
-//		String declarationLine = "";
-//		for (Component component : rule.getComponents()) {
-//			// declarationLine += component.getSelectStatement();
-//		}
-//		return declarationLine;
-//	}
 	
 	private String getComparisonLine(){
 		String template = rule.getTemplate();
-		template = template.replaceAll("%column%", rule.getRestrictedTable() + "." +rule.getRestrictedColumn());
+		template = template.replaceFirst("%column%", rule.getRestrictedTable() + "." +rule.getRestrictedColumn());
 		template = template.replaceAll("%operator%", rule.getOperator());
-		int count = StringUtils.countMatches(template, "%literalvalue%");
+		int countvalues = StringUtils.countMatches(template, "%literalvalue%");
+		int countcolumns = StringUtils.countMatches(template, "%column%");
+		System.out.println(countcolumns);
 		
-		for(int i = 0; i <= count-1; i++){
+		for(int i = 0; i <= countvalues-1; i++){
 			template = template.replaceFirst("%literalvalue%", rule.getValues().get(i).toString());
+		}
+		for(int i = 0; i <= countcolumns-1; i++){
+			template = template.replaceFirst("%column%", rule.getColumns().get(i).toString());
 		}
 		return template;
 	}
@@ -110,7 +107,8 @@ public class Generator {
 		triggerName += "CNS_";
 		triggerName += rule.getRestrictedColumn().replaceAll("[aeiou]\\B", "")
 				.toUpperCase();
-		triggerName += "_RNGR";
+		triggerName += "_RNGR_";
+		triggerName += rule.getRuleId();
 		return triggerName;
 	}
 

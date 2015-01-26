@@ -10,13 +10,14 @@ begin
   elsif updating then 
     l_oper := 'UPD'; 
   elsif deleting then 
-    l_oper := 'DEL'; 
+    l_oper := 'DEL';
   end if; 
   
   declare 
   l_passed boolean := true; 
   %declarations% 
 begin 
+  %
   if l_oper in ('%triggerevents%') then 
     l_passed := %comparison%;
     if not l_passed then 

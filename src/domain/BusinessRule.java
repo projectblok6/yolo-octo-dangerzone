@@ -17,21 +17,23 @@ public class BusinessRule {
 	public int targetAppId;
 	private ArrayList<String> triggerEvents;
 	private ArrayList<String> lValues;
+	private ArrayList<Column> columns;
 	private TargetDatabase targetDatabase;
 	
-	public BusinessRule(int id, int ruleTypeId, String name, String operName, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs, ArrayList<String> vals, TargetDatabase db){
-		ruleId = id;
+	public BusinessRule(int id, int ruleTypeId, String name, String operName, String tabId, String colId, String error, String template, int targetApp, ArrayList<String> trigs, ArrayList<String> vals, ArrayList<Column> columns, TargetDatabase db){
+		this.ruleId = id;
 		this.ruleTypeId = ruleTypeId;
-		nameCode = name;
-		operatorName = operName;
-		restrictedTable = tabId;
-		restrictedColumn = colId;
-		errorMessage = error;
-		targetAppId = targetApp;
+		this.nameCode = name;
+		this.operatorName = operName;
+		this.restrictedTable = tabId;
+		this.restrictedColumn = colId;
+		this.errorMessage = error;
+		this.targetAppId = targetApp;
 		this.template = template;
-		triggerEvents = trigs;
-		lValues = vals;
-		targetDatabase = db;
+		this.triggerEvents = trigs;
+		this.lValues = vals;
+		this.columns = columns;
+		this.targetDatabase = db;
 	}
 	
 	public String getGeneratedRule(){
@@ -125,6 +127,9 @@ public class BusinessRule {
 	
 	public ArrayList<String> getValues(){
 		return lValues;
+	}
+	public ArrayList<Column> getColumns(){
+		return columns;
 	}
 
 }

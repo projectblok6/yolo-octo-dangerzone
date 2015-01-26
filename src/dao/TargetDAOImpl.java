@@ -24,9 +24,8 @@ public class TargetDAOImpl implements TargetDAO {
 	@Override
 	public void executeGeneratedRule(String code) {
 		try {
-			System.out.println("Test");
 			Statement stmt = connection.createStatement();
-			stmt.execute(code);
+			//stmt.execute(code);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
