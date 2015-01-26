@@ -26,7 +26,7 @@ public class Generator {
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
 		triggerString = triggerString.replaceAll("%declarations%",
 				getDeclarationsLine());
-		//triggerString = triggerString.replaceAll("%selectstatements%",
+		triggerString = triggerString.replaceAll("%selectstatements%",
 				//rule.getTemplate());
 		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString
@@ -95,7 +95,7 @@ public class Generator {
 	
 	private String getComparisonLine(){
 		String template = rule.getTemplate();
-		template = template.replaceAll("%column%", rule.getRestrictedColumn());
+		template = template.replaceAll("%column%", rule.getRestrictedTable() + "." +rule.getRestrictedColumn());
 		template = template.replaceAll("%operator%", rule.getOperator());
 		int count = StringUtils.countMatches(template, "%literalvalue%");
 		

@@ -3,8 +3,7 @@ declare
   %declarations% 
 begin 
   if l_oper in ('%triggerevents%') then 
-    %selectstatements% 
-    l_passed := %comparison% 
+    l_passed := %comparison%;
     if not l_passed then 
       l_error_stack := l_error_stack || '%errormessage%'; 
     end if; 

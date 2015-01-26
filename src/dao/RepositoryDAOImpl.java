@@ -16,14 +16,14 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	private final String url = "jdbc:oracle:thin:@ondora01.hu.nl:8521:cursus01";
 	private final String username = "tho6_2014_2c_team3";
 	private final String password = "tho6_2014_2c_team3";
-	private ArrayList<BusinessRule> allBusinessRules = new ArrayList<BusinessRule>();
 
 	public RepositoryDAOImpl() throws SQLException {
 		connectToRepository();
 	}
 
 	public ArrayList<BusinessRule> getAllUngeneratedBusinessRules() throws SQLException {
-		Statement stmt = connection.createStatement();
+		ArrayList<BusinessRule> allBusinessRules = new ArrayList<BusinessRule>();
+		Statement stmt = connection.createStatement();		
 		ResultSet resultSet = stmt
 				.executeQuery("SELECT BUSINESSRULE.BR_ID,BUSINESSRULE.ERROR_MESSAGE,BUSINESSRULE.OPERATOR_TYPE_OT_ID,BUSINESSRULE.NAME_CODE,BUSINESSRULE.TABLE_TA,BUSINESSRULE.COLUMN_TA,DATABASE_TYPE.TRIGGER_TEMPLATE"
 						+ ",DB_USERNAME,DB_PASSWORD,HOST,PORT,SSID,TYPE,TARGETAPPLICATION_TA_ID, BUSINESSRULE.BUSINESSRULETYPE_BRT_ID"
@@ -37,8 +37,9 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 						+ " INNER JOIN BUSINESSRULETYPE"
 						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID = BUSINESSRULETYPE.BRT_ID"
 						+ " WHERE STATUS = 0 OR STATUS = 2");
-
-		while (resultSet.next()) {
+	
+		
+		while(resultSet.next()){
 			int ruleId = resultSet.getInt("BR_ID");
 			String nameCode = resultSet.getString("NAME_CODE");
 			String colTa = resultSet.getString("COLUMN_TA");
@@ -53,14 +54,9 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			String port = resultSet.getString("PORT");
 			String ssid = resultSet.getString("SSID");
 			String type = resultSet.getString("TYPE");
+			String operatorName = getOperator(operatorId);
 			TargetDatabase tdb = new TargetDatabase(dbUser, dbPass, host, port, ssid, type);
-			ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);
 			
-			String operatorName = "";
-			while(operatorSet.next()){
-				operatorName = operatorSet.getString("NAME");
-			}
-
 			String template = getTemplate(ruleTypeId);
 			ArrayList<String> vals = getValues(ruleId);
 			ArrayList<String> triggers = getTriggers(ruleId);
@@ -69,6 +65,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 					operatorName, tabTa, colTa, errorMessage, template, targetAppId, triggers, vals, tdb);
 			allBusinessRules.add(b);
 		}
+		stmt.close();
 		return allBusinessRules;
 	}
 	
@@ -79,6 +76,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		while(resultSet.next()){
 			template = resultSet.getString("TEMPLATE");
 		}
+		stmt.close();
 		return template;
 	}
 	
@@ -90,7 +88,19 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 			String t = resultSet.getString("TRIGGER_TYPE");
 			triggers.add(t);
 		}
+		stmt.close();
 		return triggers;
+	}
+	
+	public String getOperator(int operatorId) throws SQLException{
+		Statement stmt = connection.createStatement();
+		ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);			
+		String operatorName = "";
+		while(operatorSet.next()){
+			operatorName = operatorSet.getString("NAME");
+		}
+		stmt.close();
+		return operatorName;
 	}
 	
 	public ArrayList<String> getValues(int br) throws SQLException{
@@ -109,6 +119,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 				values.add(v);
 			}
 		}
+		stmt.close();
 		return values;
 	}
 

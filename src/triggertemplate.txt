@@ -6,11 +6,11 @@ declare
     l_error_stack varchar2 ( 4000 ); 
 begin 
   if inserting then 
-    l_oper := 'Insert'; 
+    l_oper := 'INS'; 
   elsif updating then 
-    l_oper := 'Update'; 
+    l_oper := 'UPD'; 
   elsif deleting then 
-    l_oper := 'Delete'; 
+    l_oper := 'DEL'; 
   end if; 
   
   declare 
@@ -18,8 +18,7 @@ begin
   %declarations% 
 begin 
   if l_oper in ('%triggerevents%') then 
-    %selectstatements% 
-    l_passed := %comparison% 
+    l_passed := %comparison%;
     if not l_passed then 
       l_error_stack := l_error_stack || '%errormessage%'; 
     end if; 
