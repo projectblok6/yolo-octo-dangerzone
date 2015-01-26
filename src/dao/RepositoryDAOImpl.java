@@ -36,7 +36,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 						+ " ON DATABASE_TYPE.DT_ID = TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
 						+ " INNER JOIN BUSINESSRULETYPE"
 						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID = BUSINESSRULETYPE.BRT_ID"
-						+ " WHERE STATUS = 0 OR STATUS = 2");
+						+ " WHERE STATUS = 0");
 	
 		
 		while(resultSet.next()){
@@ -94,10 +94,10 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	
 	public String getOperator(int operatorId) throws SQLException{
 		Statement stmt = connection.createStatement();
-		ResultSet operatorSet = stmt.executeQuery("SELECT NAME FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);			
+		ResultSet operatorSet = stmt.executeQuery("SELECT OPERATOR FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);			
 		String operatorName = "";
 		while(operatorSet.next()){
-			operatorName = operatorSet.getString("NAME");
+			operatorName = operatorSet.getString("OPERATOR");
 		}
 		stmt.close();
 		return operatorName;

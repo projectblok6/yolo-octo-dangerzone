@@ -26,7 +26,7 @@ public class Generator {
 		triggerString = triggerString.replaceAll("%triggerevents%", getTriggerLine());
 		triggerString = triggerString.replaceAll("%declarations%",
 				getDeclarationsLine());
-		triggerString = triggerString.replaceAll("%selectstatements%",
+		//triggerString = triggerString.replaceAll("%selectstatements%",
 				//rule.getTemplate());
 		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString
