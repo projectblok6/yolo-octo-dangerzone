@@ -62,7 +62,7 @@ public class Generator {
 		} else if(rule.getTriggerEvents().size() == 1) {
 			String triggerLine = "";
 			for (String triggerEvent : rule.getTriggerEvents()) {
-				triggerLine += triggerEvent;
+				triggerLine += "'" + triggerEvent + "'";
 			}
 			return triggerLine;
 		} else{
@@ -82,7 +82,14 @@ public class Generator {
 	private String getDeclarationLine(){
 		String declarationLine = "";
 		for (Column c : rule.getColumns()){
-			declarationLine += "l_" + c.getColumnName() + " " + c.getType() + "(4000);";
+			if(c.getType().equals("varchar2")){
+				declarationLine += "l_" + c.getColumnName() + " " + c.getType() + "(4000);";
+			}else if(c.getType().equals("number")){
+				declarationLine += "l_" + c.getColumnName() + " " + c.getType() + "(38);";
+			}else if(c.getType().equals("date")||c.getType().equals("boolean")){
+				declarationLine += "l_" + c.getColumnName() + " " + c.getType();
+			}
+			
 		}
 		return declarationLine;
 	}
@@ -106,7 +113,7 @@ public class Generator {
 	
 	private String getComparisonLine(){
 		String template = rule.getTemplate();
-		template = template.replaceFirst("%column%", rule.getRestrictedTable() + "." +rule.getRestrictedColumn());
+		template = template.replaceFirst("%column%", ":new." + rule.getRestrictedColumn());
 		template = template.replaceAll("%operator%", rule.getOperator());
 		int countvalues = StringUtils.countMatches(template, "%literalvalue%");
 		int countcolumns = StringUtils.countMatches(template, "%column%");
