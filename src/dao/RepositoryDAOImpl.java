@@ -112,7 +112,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		
 		String v = "";
 		while(resultSet.next()){
-			if(resultSet.getString("TYPE").equals("varchar")){
+			if(resultSet.getString("TYPE").equals("varchar2")){
 				v = resultSet.getString("VALUE");
 				v = "'" + v + "'";
 				values.add(v);

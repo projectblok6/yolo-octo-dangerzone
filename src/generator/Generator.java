@@ -94,7 +94,12 @@ public class Generator {
 			selectLine += " INTO l_"+ c.getColumnName();
 			selectLine += " FROM " + c.getTableName();
 			selectLine += " WHERE " + c.getColumnName() + " = ";
-			selectLine += c.getUniqueValue() + ";";
+			if(c.getType().equals("varchar2") || c.getType().endsWith("varchar2")){
+				selectLine += "'" + c.getUniqueValue() + "';";
+			}
+			else{
+				selectLine += c.getUniqueValue() + ";";
+			}
 		}
 		return selectLine;
 	}
@@ -107,7 +112,8 @@ public class Generator {
 		int countcolumns = StringUtils.countMatches(template, "%column%");
 		
 		for(int i = 0; i <= countvalues-1; i++){
-			template = template.replaceFirst("%literalvalue%", rule.getValues().get(i).toString());
+			String value = rule.getValues().get(i).toString();		
+			template = template.replaceFirst("%literalvalue%", value);
 		}
 		for(int i = 0; i <= countcolumns-1; i++){
 			String columnString = "";
