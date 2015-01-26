@@ -143,14 +143,15 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	
 	public ArrayList<Column> getColumns(int br) throws SQLException{
 		Statement stmt = connection.createStatement();
-		ResultSet resultSet = stmt.executeQuery("SELECT NAME, TABLE_NAME, UNIQUE_VALUE, COLUMN_TYPE FROM COLUMN_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
+		ResultSet resultSet = stmt.executeQuery("SELECT NAME, TABLE_NAME, UNIQUE_VALUE, UNIQUE_VALUE_NAME, COLUMN_TYPE FROM COLUMN_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
 		ArrayList<Column> columns = new ArrayList<Column>();
 		while(resultSet.next()){
 			String name = resultSet.getString("NAME");
 			String table = resultSet.getString("TABLE_NAME");
 			String uniqueValue = resultSet.getString("UNIQUE_VALUE");
+			String uniqueValueName = resultSet.getString("UNIQUE_VALUE_NAME");
 			String type = resultSet.getString("COLUMN_TYPE");
-			Column column = new Column(name, table, uniqueValue, type);
+			Column column = new Column(name, table, uniqueValue, uniqueValueName, type);
 			columns.add(column);
 		}
 		stmt.close();
@@ -166,11 +167,11 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	}
 	
 	public void setStatus(int businessRuleId, int Status) throws SQLException{
-		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET STATUS=? WHERE BR_ID = ?");
-		stmt.setInt(1, Status);
-		stmt.setInt(2, businessRuleId);
-		stmt.execute();
-		stmt.close();
+//		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET STATUS=? WHERE BR_ID = ?");
+//		stmt.setInt(1, Status);
+//		stmt.setInt(2, businessRuleId);
+//		stmt.execute();
+//		stmt.close();
 	}
 
 	public void connectToRepository() {

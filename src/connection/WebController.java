@@ -17,7 +17,8 @@ public class WebController {
 			e.printStackTrace();
 		}
 	}
-	public void generateBusinessRules(){
+	public String generateBusinessRules(){
+		String returnString = "";
 		try {
 			dao.connectToRepository();
 			ArrayList<BusinessRule> businessRules = dao.getAllUngeneratedBusinessRules();
@@ -31,10 +32,12 @@ public class WebController {
 				TargetDatabase targetDatabase = b.getTargetDatabase();
 				targetDao.connectToTarget(targetDatabase.getUrl(), targetDatabase.getUsername(), targetDatabase.getPassword(), targetDatabase.getDatabaseType());
 				targetDao.executeGeneratedRule(businessRuleCode);
+				returnString += businessRuleCode + "\n";
 				dao.setStatus(businessRuleId, 2);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			returnString += "Oeps, er is iets fout gegaan!";
 		}
+		return returnString;
 	}
 }

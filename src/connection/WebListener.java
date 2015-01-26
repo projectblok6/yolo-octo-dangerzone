@@ -11,8 +11,9 @@ import javax.ws.rs.core.MediaType;
 public class WebListener {
 	@GET
 	@Path("/generate")
-	public void generateBusinessRule() {
+	@Produces(MediaType.TEXT_PLAIN)
+	public String generateBusinessRule() {
 		WebController webController = new WebController();;
-		webController.generateBusinessRules();
+		return webController.generateBusinessRules();
 	}
 }

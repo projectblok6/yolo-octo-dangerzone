@@ -29,8 +29,8 @@ public class Generator {
 		triggerString = triggerString.replaceAll("%selectstatements%", getSelectLine());
 		triggerString = triggerString.replaceAll("%comparison%", getComparisonLine());
 		triggerString = triggerString.replaceAll("%tablename%", rule.getRestrictedTable());
-		triggerString = triggerString.replaceAll("%businessrules%", triggerString);
 		triggerString = triggerString.replaceAll("%triggername%", getTriggerName());
+		System.out.println(triggerString);
 		return triggerString;
 	}
 	
@@ -80,7 +80,7 @@ public class Generator {
 			selectLine += "SELECT " + c.getColumnName();
 			selectLine += " INTO l_"+ c.getColumnName();
 			selectLine += " FROM " + c.getTableName();
-			selectLine += " WHERE " + c.getColumnName() + " = ";
+			selectLine += " WHERE " + c.getUniqueValueName() + " = ";
 			if(c.getType().equals("varchar2") || c.getType().endsWith("varchar2")){
 				selectLine += "'" + c.getUniqueValue() + "';";
 			}
@@ -92,7 +92,7 @@ public class Generator {
 	}
 	
 	private String getComparisonLine(){
-		String template = rule.getTemplate();
+		String template = rule.getOperatorTemplate();
 		template = template.replaceFirst("%column%", ":new." + rule.getRestrictedColumn());
 		template = template.replaceAll("%operator%", rule.getOperator());
 		int countvalues = StringUtils.countMatches(template, "%literalvalue%");
