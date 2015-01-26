@@ -32,7 +32,6 @@ public class WebController {
 				targetDao.connectToTarget(targetDatabase.getUrl(), targetDatabase.getUsername(), targetDatabase.getPassword(), targetDatabase.getDatabaseType());
 				targetDao.executeGeneratedRule(businessRuleCode);
 				dao.setStatus(businessRuleId, 2);
-				System.out.println(businessRuleCode);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -36,10 +36,11 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 						+ " ON DATABASE_TYPE.DT_ID = TARGETAPPLICATION.DATABASE_TYPE_DT_ID"
 						+ " INNER JOIN BUSINESSRULETYPE"
 						+ " ON BUSINESSRULE.BUSINESSRULETYPE_BRT_ID = BUSINESSRULETYPE.BRT_ID"
-						+ " WHERE STATUS = 0 AND BUSINESSRULETYPE_BRT_ID != 4 OR BUSINESSRULETYPE_BRT_ID != 6 OR BUSINESSRULETYPE_BRT_ID != 8 OR BUSINESSRULETYPE_BRT_ID != 9");
+						+ " WHERE STATUS = 0 AND (BUSINESSRULETYPE_BRT_ID != 4 OR BUSINESSRULETYPE_BRT_ID != 6 OR BUSINESSRULETYPE_BRT_ID != 8 OR BUSINESSRULETYPE_BRT_ID != 9)");
 	
 		
 		while(resultSet.next()){
+			System.out.println("test");
 			int ruleId = resultSet.getInt("BR_ID");
 			String nameCode = resultSet.getString("NAME_CODE");
 			String colTa = resultSet.getString("COLUMN_TA");
@@ -173,6 +174,12 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	}
 
 	public void connectToRepository() {
+		try {
+			Class.forName ("oracle.jdbc.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(url, username, password);
