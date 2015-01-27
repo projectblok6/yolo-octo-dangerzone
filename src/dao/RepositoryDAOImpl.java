@@ -87,7 +87,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		return template;
 	}
 
-	public String getOperatorTemplate(int brt) throws SQLException{
+	private String getOperatorTemplate(int brt) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt.executeQuery("SELECT BUSINESSRULETYPE.TEMPLATE FROM BUSINESSRULETYPE WHERE BRT_ID = " + brt);
 		String template = "";
@@ -98,7 +98,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		return template;
 	}
 	
-	public ArrayList<String> getTriggers(int br) throws SQLException{
+	private ArrayList<String> getTriggers(int br) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt.executeQuery("SELECT TRIGGER_TYPE FROM TRIGGER_EVENT WHERE BUSINESSRULE_BR_ID = " + br);
 		ArrayList<String> triggers = new ArrayList<String>();
@@ -110,7 +110,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		return triggers;
 	}
 	
-	public String getOperator(int operatorId) throws SQLException{
+	private String getOperator(int operatorId) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet operatorSet = stmt.executeQuery("SELECT OPERATOR FROM OPERATOR_TYPE WHERE OT_ID = " + operatorId);			
 		String operatorName = "";
@@ -121,7 +121,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		return operatorName;
 	}
 	
-	public ArrayList<String> getValues(int br) throws SQLException{
+	private ArrayList<String> getValues(int br) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt.executeQuery("SELECT VALUE, TYPE FROM LITERAL_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
 		ArrayList<String> values = new ArrayList<String>();
@@ -141,7 +141,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		return values;
 	}
 	
-	public ArrayList<Column> getColumns(int br) throws SQLException{
+	private ArrayList<Column> getColumns(int br) throws SQLException{
 		Statement stmt = connection.createStatement();
 		ResultSet resultSet = stmt.executeQuery("SELECT NAME, TABLE_NAME, UNIQUE_VALUE, UNIQUE_VALUE_NAME, COLUMN_TYPE FROM COLUMN_VALUE WHERE BUSINESSRULE_BR_ID = " + br);
 		ArrayList<Column> columns = new ArrayList<Column>();
@@ -167,11 +167,11 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 	}
 	
 	public void setStatus(int businessRuleId, int Status) throws SQLException{
-//		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET STATUS=? WHERE BR_ID = ?");
-//		stmt.setInt(1, Status);
-//		stmt.setInt(2, businessRuleId);
-//		stmt.execute();
-//		stmt.close();
+		PreparedStatement stmt = connection.prepareStatement("UPDATE BUSINESSRULE SET STATUS=? WHERE BR_ID = ?");
+		stmt.setInt(1, Status);
+		stmt.setInt(2, businessRuleId);
+		stmt.execute();
+		stmt.close();
 	}
 
 	public void connectToRepository() {
